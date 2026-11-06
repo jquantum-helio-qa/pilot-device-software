@@ -125,4 +125,10 @@ jobs:
     steps:
       - name: Post-deployment verification
         shell: bash
-        run: echo "verification passed"
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+        run: |
+          case "$RELEASE_VERSION" in
+            *-vfail*) echo "verification failed on purpose: synthetic post-deployment check refused version $RELEASE_VERSION" >&2; exit 1 ;;
+          esac
+          echo "verification passed"
