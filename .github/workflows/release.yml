@@ -65,6 +65,8 @@ jobs:
           import hashlib, json, os
           body = json.dumps({"application": "pilot-device", "version": os.environ["RELEASE_VERSION"],
                              "commit": os.environ["GITHUB_SHA"]}, sort_keys=True).encode()
+          if "-fail" in os.environ["RELEASE_VERSION"]:
+              raise SystemExit("synthetic build failure requested by the release version (pilot AI diagnosis check)")
           digest = "sha256:" + hashlib.sha256(body).hexdigest()
           open(os.environ["GITHUB_OUTPUT"], "a").write(f"digest={digest}\n")
           print("artifact", digest)
