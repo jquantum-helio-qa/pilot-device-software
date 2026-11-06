@@ -49,7 +49,7 @@ concurrency:
 jobs:
   build:
     if: ${{ inputs.deployment_only != 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, pilot-lab]
     timeout-minutes: 10
     outputs:
       artifact_digest: ${{ steps.artifact.outputs.digest }}
@@ -73,7 +73,7 @@ jobs:
   deploy:
     needs: build
     if: ${{ always() && (needs.build.result == 'success' || (inputs.deployment_only == 'true' && needs.build.result == 'skipped')) }}
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, pilot-lab]
     timeout-minutes: 10
     environment: pilot-device-staging
     steps:
@@ -118,7 +118,7 @@ jobs:
   verify:
     needs: deploy
     if: ${{ inputs.deployment_only != 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, pilot-lab]
     timeout-minutes: 15
     steps:
       - name: Post-deployment verification
